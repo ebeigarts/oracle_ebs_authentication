@@ -1657,7 +1657,11 @@ module OracleEbsAuthentication
     #       cid = newCheck(s1, s2, flag);
     #     }
         if (s2[0, 2] == "ZG")
-          cid = new_check(s1, s2, flag)
+          # EBEI: Upcase case-insensitive passwords
+          cid = new_check(s1.mb_chars.upcase.to_s, s2, flag)
+        # EBEI: Support case sensitive passwords in R12
+        elsif s2[0, 2] == "ZH"
+          cid = new_check(s1, s2.gsub(/^ZH/, 'ZG'), flag)
     #     else {
     #       cid= oldCheck(s1, s2, flag);
     #     }

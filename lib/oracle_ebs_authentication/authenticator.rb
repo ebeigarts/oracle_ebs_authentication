@@ -8,7 +8,6 @@ module OracleEbsAuthentication
 
     def get_fnd_password(username, password)
       username &&= username.upcase
-      password &&= password.mb_chars.upcase.to_s
       result = plsql.apps.fnd_security_pkg.fnd_encrypted_pwd(username, nil, nil, nil)
       if result[:p_password]
         @security.decrypt(username + "/" + password, result[:p_password], false)
