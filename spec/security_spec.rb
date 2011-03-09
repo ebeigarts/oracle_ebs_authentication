@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
-require File.dirname(__FILE__) + '/../lib/security'
+require 'spec_helper'
 
 describe "Security" do
   
@@ -21,7 +20,6 @@ describe "Security" do
   end
 
   it "a_ should return UTF-8 encoded string" do
-    @security.a_("ACEĀČĒaceāčē".chars).should == "ACEĀČĒaceāčē"
     @security.a_("ACEĀČĒaceāčē").should == "ACEĀČĒaceāčē"
   end
 

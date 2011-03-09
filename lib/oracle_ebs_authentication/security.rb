@@ -593,7 +593,7 @@ module OracleEbsAuthentication
     #   byte abyte0[] = A(s1.toCharArray());
       abyte0 = a_(s1.dup)
     #   int j1 = s2.length();
-      #j1 = s2.chars.length
+      #j1 = s2.mb_chars.length
       j1 = s2.length
       
     #   if (j1 > i1 - 1) {
