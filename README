@@ -1,0 +1,35 @@
+== OracleEbsAuthentication
+
+This plugin provides Oracle E-Business Suite user authentication functionality.
+
+== Installation
+
+To install this plugin for your Ruby on Rails application do the following:
+
+script/plugin install http://svn.rayapps.com/plugins/oracle_ebs_authentication
+
+== Examples
+
+Simple example how to use the plugin for Oracle E-Business Suite user authentication:
+
+database_name = ActiveRecord::Base.connection.current_database
+authenticator = OracleEbsAuthentication::Authenticator.new(database_name)
+if authenticator.validate_user_password(login, password)
+	# user authenticated
+	if authenticator.user_reponsibilities.include? "System Administrator"
+		# user has System Administrator role
+	end
+	# ...
+else
+  # authentication failed
+end
+
+See other usage examples in RSpec examples in spec/oracle_ebs_authentication_spec.rb
+
+== Credits
+
+Copyright (C) 2007 Raimonds Simanovskis
+                   http://blog.rayapps.com
+
+Oracle E-Business Suite authentication encryption algorythm was taken from Java source code 
+by Mehmet Milci at http://www.milci.com/eappsjira and was rewritten in Ruby by Raimonds Simanovskis.
