@@ -2,7 +2,9 @@
 # Original Java source is included in comments followed by corresponding Ruby code.
 # As original Java source is not documented then Ruby source code was done
 # as similar as possible to Java code to avoid differences in functionality.
-#
+# 
+# http://code.google.com/p/jebusinessauth/source/browse/trunk/src/com/milci/ebusinesssuite/eBusinessSuiteSecurity.java
+# 
 
 require "digest/sha1"
 
