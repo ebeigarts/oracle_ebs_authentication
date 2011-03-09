@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
 
   s.rubygems_version = "1.3.6"
 
-  s.add_runtime_dependency "activesupport"
-  s.add_runtime_dependency "ruby-plsql"
+  s.add_runtime_dependency "activesupport", ">= 2.2"
+  s.add_runtime_dependency "ruby-plsql", ">= 0.4.2"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec", ["~> 2.5.0"]
