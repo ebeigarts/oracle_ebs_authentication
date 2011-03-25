@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "oracle_ebs_authentication"
   s.version     = OracleEbsAuthentication::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Edgars Beigarts"]
+  s.authors     = ["Raimonds Simanovskis", "Edgars Beigarts"]
   s.email       = "1@wb4.lv"
   s.homepage    = "http://github.com/ebeigarts/oracle_ebs_authentication"
   s.description = %q{This plugin provides Oracle E-Business Suite user authentication functionality.}
