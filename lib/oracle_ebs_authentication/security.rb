@@ -1,17 +1,13 @@
-# The Java original source code was taken form http://www.milci.com/eappsjira
-# Original Java source is included in comments followed by corresponding Ruby code.
-# As original Java source is not documented then Ruby source code was done
-# as similar as possible to Java code to avoid differences in functionality.
-# 
-# http://code.google.com/p/jebusinessauth/source/browse/trunk/src/com/milci/ebusinesssuite/eBusinessSuiteSecurity.java
-# 
-
 require "digest/sha1"
 
 module OracleEbsAuthentication
-
+  # The Java original source code was taken form
+  # http://code.google.com/p/jebusinessauth/source/browse/trunk/src/com/milci/ebusinesssuite/eBusinessSuiteSecurity.java
+  # 
+  # As original Java source is not documented then Ruby source code was done
+  # as similar as possible to Java code to avoid differences in functionality.
+  # 
   class Security
-
     def initialize
     end
 
@@ -1153,7 +1149,5 @@ module OracleEbsAuthentication
         0x20004010, 0,
         0x20404000, 0x20000000, 0x400010, 0x20004010
     ]
-
   end
-
 end
