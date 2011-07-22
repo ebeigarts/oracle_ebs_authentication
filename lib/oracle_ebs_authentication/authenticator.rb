@@ -22,11 +22,17 @@ module OracleEbsAuthentication
       nil
     end
     
-    def get_fnd_responsibilities(username)
+    def get_fnd_user_id(username)
       username &&= username.upcase
-      result = plsql.apps.fnd_security_pkg.fnd_encrypted_pwd(username, nil, nil, nil)
-      if result[:p_user_id]
-        plsql.select(:all, OracleEbsAuthentication::Authenticator::FND_RESPONSIBILITY_QUERY, result[:p_user_id]).map{|row| row[:responsibility_name]}
+      plsql.apps.fnd_security_pkg.fnd_encrypted_pwd(username, nil, nil, nil)[:p_user_id]
+    rescue OCIError
+      nil  
+    end
+    
+    def get_fnd_responsibilities(username)
+      user_id = get_fnd_user_id(username)
+      if user_id
+        plsql.select(:all, OracleEbsAuthentication::Authenticator::FND_RESPONSIBILITY_QUERY, user_id).map{|row| row[:responsibility_name]}
       else
         []
       end
