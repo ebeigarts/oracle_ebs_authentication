@@ -5,7 +5,7 @@ describe "Authenticator" do
     if DATABASE_NAME && DATABASE_USERNAME && DATABASE_PASSWORD
       plsql.connect! DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME
     else
-      raise "You need to specify DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD"
+      pending "You need to specify DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD"
     end
   end
 
@@ -32,6 +32,12 @@ describe "Authenticator" do
   describe "#validate_user_password" do
     it "should validate user password for given user" do
       @auth.validate_user_password(@user, @password).should be_true
+    end
+  end
+
+  describe "#get_fnd_responsibilities" do
+    it "should return responsibility names for given user" do
+      @auth.get_fnd_responsibilities("HINKKJUH").should include("System Administrator")
     end
   end
 end
