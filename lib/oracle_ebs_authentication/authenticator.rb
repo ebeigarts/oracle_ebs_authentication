@@ -18,15 +18,17 @@ module OracleEbsAuthentication
       if result[:p_password]
         @security.decrypt(username + "/" + password, result[:p_password], false)
       end
-    rescue OCIError
-      nil
+    rescue OCIError => e
+      if e.message.include?("ORA-20001: Your account does not exist or has expired.")
+        nil
+      else
+        raise e
+      end
     end
     
     def get_fnd_user_id(username)
       username &&= username.upcase
       plsql.apps.fnd_security_pkg.fnd_encrypted_pwd(username, nil, nil, nil)[:p_user_id]
-    rescue OCIError
-      nil  
     end
     
     def get_fnd_responsibilities(username)
@@ -36,8 +38,6 @@ module OracleEbsAuthentication
       else
         []
       end
-    rescue OCIError
-      []
     end
 
     def validate_user_password(username, password)
