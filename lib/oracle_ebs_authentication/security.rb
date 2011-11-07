@@ -8,6 +8,45 @@ module OracleEbsAuthentication
   # as similar as possible to Java code to avoid differences in functionality.
   # 
   class Security
+    if RUBY_VERSION =~ /^1.9/
+      class Bytes < String
+        def initialize(string)
+          super(string.force_encoding('ASCII-8BIT'))
+        end
+
+        def [](*args)
+          if args.length == 1
+            super(*args).ord
+          else
+            super
+          end
+        end
+
+        def []=(*args)
+          if args.length == 2
+            super(args[0], args[1].chr)
+          else
+            super
+          end
+        end
+      end
+
+      def bytes(string)
+        Bytes.new(string)
+      end
+
+    else
+      def bytes(string)
+        string
+      end
+
+    end
+
+    def null_bytes(count)
+      bytes("\0") * count
+    end
+
+
     def initialize
     end
 
@@ -71,7 +110,7 @@ module OracleEbsAuthentication
           s2[0, "ZG_ENCRYPT_FAILED_".length] == "ZG_ENCRYPT_FAILED_")
         return nil
       end
-      abyte0 = s1.dup
+      abyte0 = bytes s1.dup
       l2 = abyte0.length
       i3 = s2.length
       i1 = 1
@@ -95,11 +134,11 @@ module OracleEbsAuthentication
       end
       s3 = s2[2..-1]
       abyte1 = p(s3)
-      abyte2 = "\0"*(abyte1.length - i2)
-      abyte3 = "\0"*i2
+      abyte2 = null_bytes(abyte1.length - i2)
+      abyte3 = null_bytes i2
       abyte2[0, abyte1.length - i2] = abyte1[0, abyte1.length - i2]
       abyte3[0, i2] = abyte1[abyte1.length - i2, i2]
-      abyte4 = "\0"*(i2 + l2)
+      abyte4 = null_bytes(i2 + l2)
       abyte4[0, i2] = abyte3[0, i2]
       abyte4[i2, l2] = abyte0[0, l2]
       # puts "<br/>DEBUG new_check: abyte4=#{abyte4.inspect} abyte2=#{abyte2.unpack("H*")[0]}"
@@ -116,7 +155,7 @@ module OracleEbsAuthentication
         j3 = k2
         break
       end
-      abyte6 = "\0"*(j3 - byte0)
+      abyte6 = null_bytes(j3 - byte0)
       abyte6[0, j3 - byte0] = abyte5[byte0, j3 - byte0]
       s4 = abyte6
       if (s4 != nil && flag)
@@ -145,10 +184,10 @@ module OracleEbsAuthentication
     end
 
     def e(ai)
-      abyte0 = "\0"*4
+      abyte0 = null_bytes 4
       abyte1 = nil
       if (ai != nil)
-        abyte1 = "\0"*(ai.length)
+        abyte1 = null_bytes(ai.length)
         for i1 in 0...ai.length
           abyte0[3] = (ai[i1] & 0xff)
           abyte0[2] = ( (ai[i1] & 0xff00) >> 8)
@@ -181,10 +220,10 @@ module OracleEbsAuthentication
         return nil
       end
       i1 = abyte1.length / 8
-      abyte3 = "\0"*8
-      abyte4 = "\0"*8
-      abyte5 = "\0"*8
-      abyte2 = "\0"*8
+      abyte3 = null_bytes 8
+      abyte4 = null_bytes 8
+      abyte5 = null_bytes 8
+      abyte2 = null_bytes 8
       abyte3[0,8] = abyte0[0, 8]
       abyte4[0,8] = abyte0[8, 8]
       abyte5[0,8] = abyte0[16, 8]
@@ -192,7 +231,7 @@ module OracleEbsAuthentication
       ai = l(abyte3, false)
       ai1 = l(abyte4, true)
       ai2 = l(abyte5, false)
-      abyte6 = "\0"*(abyte1.length)
+      abyte6 = null_bytes(abyte1.length)
       j1 = 0
       k1 = 0
       while (j1 < i1)
@@ -216,7 +255,7 @@ module OracleEbsAuthentication
           return nil
         end
       end
-      abyte7 = "\0"*(abyte1.length - byte0)
+      abyte7 = null_bytes(abyte1.length - byte0)
       abyte7[0, abyte1.length - byte0] = abyte6[0, abyte1.length - byte0]
       # puts "<br/>DEBUG g: abyte7=#{abyte7.unpack("H*")[0]}"
       return abyte7
@@ -241,17 +280,17 @@ module OracleEbsAuthentication
       else
         ai = a(abyte0, abyte0.length)
         abyte2 = e(ai)
-        abyte3 = "\0"*258
+        abyte3 = null_bytes 258
         b_(abyte3, abyte2, nil, 5)
-        abyte4 = "\0"*i1
+        abyte4 = null_bytes i1
         b_(abyte3, abyte1, abyte4, i1)
         return abyte4
       end
     end
 
     def l(abyte0, flag)
-      abyte1 = "\0"*56
-      abyte2 = "\0"*56
+      abyte1 = null_bytes 56
+      abyte2 = null_bytes 56
       ai = [nil]*32
       # TODO: check impact of >>> substitution with >>
       for j1 in 0...56
@@ -315,7 +354,7 @@ module OracleEbsAuthentication
       end
       abyte1 = e(ai)
       abyte2 = a_( (s2 + "\0") )
-      abyte3 = "\0"*(k1 + abyte2.length)
+      abyte3 = null_bytes(k1 + abyte2.length)
       abyte3[0, abyte2.length] = abyte2[0, abyte2.length]
       abyte3[abyte2.length, k1] = abyte1[0, k1]
       abyte4 = k(abyte0, abyte3, i1)
@@ -327,7 +366,7 @@ module OracleEbsAuthentication
         if (abyte0 == nil)
           return nil
         end
-        ac = "\0"*(abyte0.length)
+        ac = null_bytes(abyte0.length)
         i1 = 0
         flag = false
         flag1 = false
@@ -378,7 +417,7 @@ module OracleEbsAuthentication
           if break_value == :label0
             next
           end
-          ac1 = "\0"*i1
+          ac1 = null_bytes i1
           ac1[0,i1] = ac[0,i1]
         end
         return ac1
@@ -399,6 +438,7 @@ module OracleEbsAuthentication
     end
     
     def p(s1)
+      s1 = bytes s1
       flag = false
       flag1 = false
       i1 = 0
@@ -409,7 +449,7 @@ module OracleEbsAuthentication
       end
       k1 = s1.length / 2
       if (k1 > 0)
-        abyte0 = "\0"*k1
+        abyte0 = null_bytes k1
         while (k1 > 0)
           #c1 = s1.chars[i1]
           c1 = s1[i1]
@@ -428,7 +468,7 @@ module OracleEbsAuthentication
     def q(abyte0, i1, abyte1, j1, ai,
           ai1, ai2, abyte2,
           flag)
-      abyte3 = "\0"*8
+      abyte3 = null_bytes 8
       abyte3[0, 8] = abyte0[i1, 8]
       if (!flag)
         # puts "<br/>DEBUG q: initial abyte3=#{abyte3.unpack("H*")[0]}"
@@ -536,18 +576,18 @@ module OracleEbsAuthentication
       end
       abyte5 = e(ai)
       ai = nil
-      abyte6 = "\0"*(byte1 + j4 + k3)
+      abyte6 = null_bytes(byte1 + j4 + k3)
       abyte6[0, byte1] = abyte4[0, byte1]
       abyte6[byte1, k3] = abyte2[0, k3]
       abyte6[byte1+k3, j4] = abyte5[0, j4]
-      abyte7 = "\0"*(l2 + j3)
+      abyte7 = null_bytes(l2 + j3)
       abyte7[0, l2] = abyte3[0, l2]
       abyte7[l2, j3] = abyte0[0, j3]
       abyte8 = i(nil, abyte7, abyte6)
       if (abyte8 == nil)
         return "ZG_ENCRYPT_FAILED_MISC"
       else
-        abyte9 = "\0"*(abyte8.length + l2)
+        abyte9 = null_bytes(abyte8.length + l2)
         abyte9[0, abyte8.length] = abyte8[0, abyte8.length]
         abyte9[abyte8.length, l2] = abyte3[0, l2]
         s3 = z(abyte9)
@@ -648,7 +688,7 @@ module OracleEbsAuthentication
         return ""
       end
       j1 = s1.length
-      k1 = s1.index("\0")
+      k1 = s1.index(bytes("\0"))
       if (k1 > -1)
         j1 = k1
       end
@@ -699,7 +739,7 @@ module OracleEbsAuthentication
     def y(abyte0, abyte1)
       # puts "<br/>DEBUG y: abyte0=#{abyte0.nil? ? "nil" : abyte0.unpack("H*")[0]}"
       # puts "<br/>DEBUG y: abyte1=#{abyte1.nil? ? "nil" : abyte1.unpack("H*")[0]}"
-      abyte2 = "\0"*32
+      abyte2 = null_bytes 32
       messagedigest = Digest::SHA1.new
       messagedigest.reset
       byte0 = 20
@@ -734,7 +774,7 @@ module OracleEbsAuthentication
     def a_(ac)
       # RSI: if we receive String then return the same value (as it should already be in UTF-8)
       return ac if ac.is_a? String
-      abyte0 = "\0"*(ac.length * 3)
+      abyte0 = null_bytes(ac.length * 3)
       i1 = 0
       flag = false
       for j1 in 0...ac.length
@@ -756,7 +796,7 @@ module OracleEbsAuthentication
           i1 += 1
         end
       end
-      abyte1 = "\0"*i1
+      abyte1 = null_bytes i1
       abyte1[0, i1] = abyte0[0, i1]
       abyte1
     end
@@ -941,10 +981,10 @@ module OracleEbsAuthentication
       if (abyte0.length < 32)
         return nil
       end
-      abyte3 = "\0"*8
-      abyte4 = "\0"*8
-      abyte5 = "\0"*8
-      abyte2 = "\0"*8
+      abyte3 = null_bytes 8
+      abyte4 = null_bytes 8
+      abyte5 = null_bytes 8
+      abyte2 = null_bytes 8
       abyte3[0, 8] = abyte0[0, 8]
       abyte4[0, 8] = abyte0[8, 8]
       abyte5[0, 8] = abyte0[16, 8]
@@ -954,10 +994,10 @@ module OracleEbsAuthentication
       ai2 = l(abyte5, true)
       i1 = abyte1.length % 8
       byte0 = (8 - i1)
-      abyte6 = "\0"*(abyte1.length + byte0)
+      abyte6 = null_bytes(abyte1.length + byte0)
       j1 = abyte6.length / 8 - 1
       k1 = 8 * j1
-      abyte7 = "\0"*8
+      abyte7 = null_bytes 8
       abyte7[0, i1] = abyte1[k1, i1]
       for l1 in i1...8
         abyte7[l1] = byte0
