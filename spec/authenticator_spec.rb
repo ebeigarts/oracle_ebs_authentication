@@ -11,8 +11,8 @@ describe "Authenticator" do
 
   before(:each) do
     @auth = OracleEbsAuthentication::Authenticator.new
-    @user = "SIMANRAI"
-    @password = "welcome1"
+    @user = "OPERATIONS"
+    @password = "welcome"
   end
 
   describe "#get_fnd_password" do
@@ -37,7 +37,7 @@ describe "Authenticator" do
 
   describe "#get_fnd_responsibilities" do
     it "should return responsibility names for given user" do
-      @auth.get_fnd_responsibilities("HINKKJUH").should include("System Administrator")
+      @auth.get_fnd_responsibilities("OPERATIONS").should include("System Administrator")
     end
   end
 end
