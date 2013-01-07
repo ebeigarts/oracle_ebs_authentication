@@ -3,12 +3,12 @@ require "digest/sha1"
 module OracleEbsAuthentication
   # The Java original source code was taken form
   # http://code.google.com/p/jebusinessauth/source/browse/trunk/src/com/milci/ebusinesssuite/eBusinessSuiteSecurity.java
-  # 
+  #
   # As original Java source is not documented then Ruby source code was done
   # as similar as possible to Java code to avoid differences in functionality.
-  # 
+  #
   class Security
-    if RUBY_VERSION =~ /^1.9/
+    if RUBY_VERSION =~ /^(1.9|2.0)/
       class Bytes < String
         def initialize(string)
           super(string.force_encoding('ASCII-8BIT'))
@@ -341,7 +341,7 @@ module OracleEbsAuthentication
       abyte0 = a_(s1.dup)
       #j1 = s2.mb_chars.length
       j1 = s2.length
-      
+
       if (j1 > i1 - 1)
         j1 = i1 - 1
       end
@@ -428,7 +428,7 @@ module OracleEbsAuthentication
     def n(i1, j1, k1)
       return i1 ^ j1 ^ k1
     end
-    
+
     def o(i1, j1, k1)
       return i1 ^ j1 ^ k1
     end
@@ -436,7 +436,7 @@ module OracleEbsAuthentication
     def control(s1, s2, i1)
       return new_control(s1, s2, 0, i1)
     end
-    
+
     def p(s1)
       s1 = bytes s1
       flag = false
@@ -723,7 +723,7 @@ module OracleEbsAuthentication
       i1 += 1
       abyte0[i1] = (ai[1] & 0xff)
     end
-    
+
     def old_check(s1, s2, flag)
       abyte0 = a_(s1.dup)
       abyte1 = p(s2)
@@ -766,7 +766,7 @@ module OracleEbsAuthentication
       # puts "<br/>DEBUG y: abyte2=#{abyte2.unpack("H*")[0]}"
       return abyte2
     end
-    
+
     def z(abyte0)
       abyte0.unpack("H*")[0].upcase
     end
@@ -850,7 +850,7 @@ module OracleEbsAuthentication
       return true if decrypt(s1, s2, flag)
       false
     end
-    
+
     def decrypt(s1, s2, flag)
       if (s2 != nil && s2.length() > 0)
         if (s2[0, 2] == "ZG")
