@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec", ["~> 2.5.0"]
-  s.add_development_dependency "ruby-oci8", ["~> 2.0.4"]
+  s.add_development_dependency "ruby-oci8", ["~> 2.1.4"]
 
   s.files          = Dir.glob("{lib,spec}/**/*") + %w(README.md LICENSE)
   s.require_paths  = ["lib"]
