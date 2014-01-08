@@ -8,7 +8,7 @@ module OracleEbsAuthentication
   # as similar as possible to Java code to avoid differences in functionality.
   #
   class Security
-    if RUBY_VERSION =~ /^(1.9|2.0)/
+    if RUBY_VERSION =~ /^(1\.9|2\.)/
       class Bytes < String
         def initialize(string)
           super(string.force_encoding('ASCII-8BIT'))
